@@ -16,11 +16,11 @@ export class MessagesService {
   ];
 
   findAll() {
-    return this.messages;
+    return this.messages.filter(Boolean);
   }
 
   async findById(id: number) {
-    const message = this.messages.find((message) => message.id === id);
+    const message = this.messages.find((message) => message?.id === id);
 
     if (!message) {
       throw Error('Messagem nao encontrada');
@@ -36,23 +36,37 @@ export class MessagesService {
       id,
       ...messageDto,
     };
+
     return this.messages.push(newMessage);
   }
 
-  update(id: number, message: IMessage) {
+  async update(id: number, messageDto: MessageDto) {
     const index = this.messages.findIndex(
-      (message: IMessage) => message.id === id,
+      (message: IMessage) => message?.id === id,
     );
 
-    this.messages[index] = message;
+    if (index < 0) {
+      throw Error('Message not found');
+    }
 
-    return message;
+    const newMessage = {
+      id,
+      ...messageDto,
+    };
+
+    this.messages[index] = newMessage;
+
+    return newMessage;
   }
 
-  delete(id: number) {
+  async delete(id: number) {
     const index = this.messages.findIndex(
-      (message: IMessage) => message.id === id,
+      (message: IMessage) => message?.id === id,
     );
+
+    if (index < 0) {
+      throw Error('Message not found');
+    }
 
     this.messages.splice(index, 1);
     return true;

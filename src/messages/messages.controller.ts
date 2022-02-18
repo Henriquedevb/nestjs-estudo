@@ -8,7 +8,6 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { IMessage } from './interface.messages';
 import { MessageDto } from './messages.dto';
 import { MessagesService } from './messages.service';
 
@@ -33,12 +32,18 @@ export class MessagesController {
   }
 
   @Put(':id')
-  update(@Param() params, @Body() message: IMessage) {
-    return this.messagesService.update(+params.id, message);
+  update(@Param() params, @Body() messageDto: MessageDto) {
+    return this.messagesService
+      .update(+params.id, messageDto)
+      .catch((error) => {
+        throw new NotFoundException(error.message);
+      });
   }
 
   @Delete(':id')
   delete(@Param() params) {
-    return this.messagesService.delete(+params.id);
+    return this.messagesService.delete(+params.id).catch((error) => {
+      throw new NotFoundException(error.message);
+    });
   }
 }
