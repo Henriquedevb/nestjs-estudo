@@ -18,8 +18,14 @@ export class MessagesService {
     return this.messages;
   }
 
-  findById(id: number) {
-    return this.messages.find((message) => message.id === id);
+  async findById(id: number) {
+    const message = this.messages.find((message) => message.id === id);
+
+    if (!message) {
+      throw Error('Messagem nao encontrada');
+    }
+
+    return message;
   }
 
   create(message: IMessage) {
@@ -42,7 +48,6 @@ export class MessagesService {
     );
 
     this.messages.splice(index, 1);
-
     return true;
   }
 }
