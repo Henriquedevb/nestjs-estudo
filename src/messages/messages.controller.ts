@@ -5,6 +5,7 @@ import {
   Get,
   NotFoundException,
   Param,
+  ParseIntPipe,
   Post,
   Put,
 } from '@nestjs/common';
@@ -20,8 +21,8 @@ export class MessagesController {
   }
 
   @Get(':id')
-  findById(@Param() params) {
-    return this.messagesService.findById(+params.id).catch((error) => {
+  findById(@Param('id', ParseIntPipe) id) {
+    return this.messagesService.findById(id).catch((error) => {
       throw new NotFoundException(error.message);
     });
   }
@@ -32,17 +33,15 @@ export class MessagesController {
   }
 
   @Put(':id')
-  update(@Param() params, @Body() messageDto: MessageDto) {
-    return this.messagesService
-      .update(+params.id, messageDto)
-      .catch((error) => {
-        throw new NotFoundException(error.message);
-      });
+  update(@Param('id', ParseIntPipe) id, @Body() messageDto: MessageDto) {
+    return this.messagesService.update(id, messageDto).catch((error) => {
+      throw new NotFoundException(error.message);
+    });
   }
 
   @Delete(':id')
-  delete(@Param() params) {
-    return this.messagesService.delete(+params.id).catch((error) => {
+  delete(@Param('id', ParseIntPipe) id) {
+    return this.messagesService.delete(id).catch((error) => {
       throw new NotFoundException(error.message);
     });
   }
