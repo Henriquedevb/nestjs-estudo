@@ -25,4 +25,24 @@ export class MessagesService {
   create(message: IMessage) {
     return this.messages.push(message);
   }
+
+  update(id: number, message: IMessage) {
+    const index = this.messages.findIndex(
+      (message: IMessage) => message.id === id,
+    );
+
+    this.messages[index] = message;
+
+    return message;
+  }
+
+  delete(id: number) {
+    const index = this.messages.findIndex(
+      (message: IMessage) => message.id === id,
+    );
+
+    this.messages.splice(index, 1);
+
+    return true;
+  }
 }
